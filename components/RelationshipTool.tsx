@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { Chart, Place, Position, Relationship } from '../lib/chart-types';
 import type { Dictionary, Locale } from '../lib/i18n';
 import { POINT_GLYPH, SIGN_GLYPH } from '../lib/glyphs';
+import { listSaved } from '../lib/saved';
+import { inputFromPerson, type BirthInput } from '../lib/people';
 import PlaceSearch from './PlaceSearch';
 import ChartWheel from './ChartWheel';
 
@@ -16,10 +18,21 @@ const empty: Person = { name: '', date: '', time: '', timeUnknown: false, place:
 const fmt = (p: Position) => `${p.degree}°${String(p.minute).padStart(2, '0')}′`;
 const fill = (s: string, a: string, b: string) => s.replace('{a}', a).replace('{b}', b);
 
-function PersonFields({ title, p, set, lang, t }: { title: string; p: Person; set: (p: Person) => void; lang: Locale; t: Dictionary }) {
+type Saved = { key: string; label: string; input: BirthInput };
+
+function PersonFields({ title, p, set, lang, t, saved }: { title: string; p: Person; set: (p: Person) => void; lang: Locale; t: Dictionary; saved: Saved[] }) {
   return (
     <div className="card">
       <h3>{title}</h3>
+      {saved.length > 0 && (
+        <label>
+          {t.acct.choosePerson}
+          <select value="" onChange={(e) => { const s = saved.find((x) => x.key === e.target.value); if (s) set({ ...s.input }); }}>
+            <option value="">…</option>
+            {saved.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
+          </select>
+        </label>
+      )}
       <label>
         {t.form.name}
         <input value={p.name} maxLength={40} onChange={(e) => set({ ...p, name: e.target.value })} />
@@ -61,20 +74,47 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
   const [tab, setTab] = useState<'synastry' | 'composite'>('synastry');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState<Saved[]>([]);
+  const [autoRun, setAutoRun] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) { const s = JSON.parse(saved); if (s.a) setA(s.a); if (s.b) setB(s.b); }
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) { const s = JSON.parse(stored); if (s.a) setA(s.a); if (s.b) setB(s.b); }
     } catch { /* storage unavailable */ }
+    // Signed in: offer saved people, and fill ?a=me&b=<id> from the account.
+    listSaved().then((list) => {
+      if (!list) return;
+      const options: Saved[] = [
+        ...(list.me ? [{ key: 'me', label: `${t.acct.me}${list.me.name ? ` (${list.me.name})` : ''}`, input: list.me }] : []),
+        ...list.people.map((r) => ({ key: r.id, label: r.relation ? `${r.name} · ${r.relation}` : r.name, input: inputFromPerson(r) })),
+      ];
+      setSaved(options);
+      const params = new URLSearchParams(window.location.search);
+      const pa = options.find((o) => o.key === params.get('a'));
+      const pb = options.find((o) => o.key === params.get('b'));
+      if (pa) setA({ ...pa.input });
+      if (pb) setB({ ...pb.input });
+      if (pa && pb) setAutoRun(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const nameA = a.name.trim() || t.rel.personA;
   const nameB = b.name.trim() || t.rel.personB;
 
+  useEffect(() => {
+    if (autoRun && a.place && b.place) { setAutoRun(false); run(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun, a, b]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await run();
+  };
+
+  const run = async () => {
     setError(null);
     if (!a.place || !b.place) { setError(t.form.errorPlace); return; }
     setBusy(true);
@@ -105,8 +145,8 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
     <>
       <form onSubmit={submit}>
         <div className="person-grid">
-          <PersonFields title={t.rel.personA} p={a} set={setA} lang={lang} t={t} />
-          <PersonFields title={t.rel.personB} p={b} set={setB} lang={lang} t={t} />
+          <PersonFields title={t.rel.personA} p={a} set={setA} lang={lang} t={t} saved={saved} />
+          <PersonFields title={t.rel.personB} p={b} set={setB} lang={lang} t={t} saved={saved} />
         </div>
         <div className="submit-row">
           {error && <p className="error" role="alert">{error}</p>}

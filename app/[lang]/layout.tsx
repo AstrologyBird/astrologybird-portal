@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { LOCALES, getDictionary, isLocale, localePath } from '../../lib/i18n';
+import AccountLink from '../../components/AccountLink';
 import '../globals.css';
 
 export const dynamicParams = false;
@@ -51,7 +52,7 @@ export default async function LangLayout({ children, params }: { children: React
                 <a href={localePath('en')} aria-current={lang === 'en'}>EN</a>
                 <a href={localePath('nl')} aria-current={lang === 'nl'}>NL</a>
               </span>
-              <a className="btn btn-small" href={waitlist}>{t.nav.account}</a>
+              <AccountLink lang={lang} t={t} waitlistUrl={waitlist} />
             </nav>
           </header>
           {children}

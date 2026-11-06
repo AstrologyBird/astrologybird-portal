@@ -40,3 +40,20 @@ npm run test:engine
 
 See `.env.example`. `CHART_ENGINE_URL` points to the engine; `NEXT_PUBLIC_WAITLIST_URL`
 is where "Create your free account" goes until accounts exist (phase 3, Supabase).
+
+## Accounts (phase 3)
+
+Supabase (project `bjcseowrzyhylhjtozih`, EU) handles sign-in by e-mail link and stores
+`profiles` (own birth data, language, digest opt-in) and `people` (saved partners, family,
+friends). Row Level Security lets each account read and change only its own rows. The schema
+is in `supabase/migrations/`.
+
+- `/login` sends the magic link, `/auth/callback` signs the user in, `/account` shows the profile and people.
+- "Save to my account" on a chart stores the person; guests are sent to sign in first and the chart is saved afterwards.
+- `/?me=1`, `/?person=<id>` and `/relationship?a=me&b=<id>` open saved charts.
+- `NEXT_PUBLIC_ACCOUNTS_OPEN=true` switches the sign-up buttons from the waitlist to `/login`.
+  Keep it off in production until a custom SMTP sender is set in Supabase (the built-in
+  sender only mails project members and is rate limited).
+
+Supabase settings (Authentication → URL Configuration): Site URL `https://app.astrologybird.com`;
+redirect URLs `https://app.astrologybird.com/**`, `https://*-astrology-bird.vercel.app/**`, `http://localhost:3000/**`.
