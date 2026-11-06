@@ -162,6 +162,12 @@ const en = {
   aspects: { conjunction: 'conjunction', opposition: 'opposition', trine: 'trine', square: 'square', sextile: 'sextile' },
   elements: { fire: 'Fire', earth: 'Earth', air: 'Air', water: 'Water' },
   modalities: { cardinal: 'Cardinal', fixed: 'Fixed', mutable: 'Mutable' },
+  notFound: {
+    title: 'This star has drifted out of the sky.',
+    lead: "The page you were looking for isn't here (yet). Your chart is, though.",
+    chart: 'Calculate your birth chart',
+    relationship: 'Compare two charts',
+  },
   footer: { privacy: 'Without an account, your birth data is only used to calculate the chart and is not stored. With an account, it is kept privately in the EU until you delete it.', back: 'Back to astrologybird.com' },
 };
 
@@ -324,6 +330,12 @@ const nl: Dictionary = {
   aspects: { conjunction: 'conjunctie', opposition: 'oppositie', trine: 'driehoek', square: 'vierkant', sextile: 'sextiel' },
   elements: { fire: 'Vuur', earth: 'Aarde', air: 'Lucht', water: 'Water' },
   modalities: { cardinal: 'Hoofd', fixed: 'Vast', mutable: 'Beweeglijk' },
+  notFound: {
+    title: 'Deze ster is uit de hemel gedreven.',
+    lead: 'De pagina die je zocht is er (nog) niet. Je horoscoop wel.',
+    chart: 'Bereken je geboortehoroscoop',
+    relationship: 'Vergelijk twee horoscopen',
+  },
   footer: { privacy: 'Zonder account worden je geboortegegevens alleen gebruikt om de horoscoop te berekenen en niet opgeslagen. Met een account bewaren we ze privé in de EU tot je ze verwijdert.', back: 'Terug naar astrologybird.com' },
 };
 

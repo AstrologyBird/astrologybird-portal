@@ -169,3 +169,9 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
 .linkish { background: none; border: 0; padding: 4px 6px; color: var(--muted); font: 14px var(--sans); text-decoration: underline; cursor: pointer; }
 .linkish:hover { color: var(--ivory); }
 .save-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center; }
+
+/* 404 */
+.notfound { padding: 72px 0 56px; }
+.notfound h1 { margin: 14px 0 12px; }
+.notfound .lead { max-width: 440px; margin: 0 auto 28px; }
+.notfound-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
