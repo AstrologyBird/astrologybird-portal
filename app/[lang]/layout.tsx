@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { LOCALES, getDictionary, isLocale, localePath } from '../../lib/i18n';
 import AccountLink from '../../components/AccountLink';
+import { ACCOUNTS_OPEN } from '../../lib/supabase/config';
 import '../globals.css';
 
 export const dynamicParams = false;
@@ -43,11 +44,12 @@ export default async function LangLayout({ children, params }: { children: React
           <header className="topbar">
             <a href={lang === 'nl' ? 'https://www.astrologybird.com/nl' : 'https://www.astrologybird.com'} aria-label={t.nav.home}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" alt="Astrologybird" width={148} height={34} />
+              <img src="/logo.svg" alt="AstrologyBird" width={148} height={34} />
             </a>
             <nav>
               <a className="navlink" href={localePath(lang)}>{t.nav.chart}</a>
               <a className="navlink" href={localePath(lang, '/relationship')}>{t.nav.relationship}</a>
+              {ACCOUNTS_OPEN && <a className="navlink" href={localePath(lang, '/bird')}>{t.bird.nav}</a>}
               <span className="lang">
                 <a href={localePath('en')} aria-current={lang === 'en'}>EN</a>
                 <a href={localePath('nl')} aria-current={lang === 'nl'}>NL</a>

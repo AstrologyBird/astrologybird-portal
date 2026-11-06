@@ -124,6 +124,7 @@ export default function AccountClient({ lang, t, userId, initialProfile, initial
             {profileState === 'saving' ? t.acct.saving : profileState === 'saved' ? `✓ ${t.acct.saved}` : t.acct.save}
           </button>
           {hasProfile && <a className="btn btn-ghost" href={`${localePath(lang)}?me=1`}>{t.acct.myChart}</a>}
+          {hasProfile && <a className="btn btn-ghost" href={localePath(lang, '/bird')}>✦ {t.bird.nav}</a>}
           {profileState === 'error' && <span className="error">{t.form.errorGeneric}</span>}
         </div>
       </form>
