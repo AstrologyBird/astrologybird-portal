@@ -139,3 +139,25 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
   table { font-size: 13px; }
   td, th { padding: 6px 2px; }
 }
+
+.navlink { color: var(--ivory); text-decoration: none; }
+.navlink:hover { color: var(--gold); }
+.person-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 980px; margin: 28px auto 0; }
+.person-grid .card { display: grid; gap: 14px; align-content: start; }
+.person-grid h3 { color: var(--gold); }
+.submit-row { display: grid; justify-items: center; gap: 10px; margin-top: 18px; }
+.tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.legend { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.balance { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; }
+.balance strong { display: block; font-family: var(--serif); font-size: 34px; color: var(--gold); line-height: 1.1; }
+.balance span { color: var(--muted); font-size: 14px; }
+.overlay-list { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 20px; font-size: 14px; }
+.overlay-list li { padding: 5px 0; break-inside: avoid; }
+.overlay-list .sym { font-family: var(--symbol); color: var(--gold); margin-right: 6px; }
+@media (max-width: 720px) {
+  .person-grid { grid-template-columns: 1fr; }
+  .topbar { flex-wrap: wrap; row-gap: 10px; }
+  .topbar nav { gap: 12px; font-size: 13px; }
+  .overlay-list { columns: 1; }
+}

@@ -45,6 +45,8 @@ export default async function LangLayout({ children, params }: { children: React
               <img src="/logo.svg" alt="Astrologybird" width={148} height={34} />
             </a>
             <nav>
+              <a className="navlink" href={localePath(lang)}>{t.nav.chart}</a>
+              <a className="navlink" href={localePath(lang, '/relationship')}>{t.nav.relationship}</a>
               <span className="lang">
                 <a href={localePath('en')} aria-current={lang === 'en'}>EN</a>
                 <a href={localePath('nl')} aria-current={lang === 'nl'}>NL</a>
