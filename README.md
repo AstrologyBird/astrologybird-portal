@@ -20,16 +20,16 @@ English lives at `/`, Dutch at `/nl`.
 | `app/` | Next.js pages (`[lang]`) and API routes that forward to the chart engine |
 | `components/` | Form, place search, chart wheel |
 | `lib/` | Translations (EN/NL), types, glyphs |
-| `chart-engine/` | Separate calculation service (Swiss Ephemeris, **AGPL-3.0**) |
 
-The chart engine is deliberately a separate service with its own licence. Because the
-Swiss Ephemeris is used under the AGPL, the engine's source code must be available to
-users; it will move to its own public repository. The portal only talks to it over HTTP.
+Calculations come from the separate, public
+[astrologybird-chart-engine](https://github.com/AstrologyBird/astrologybird-chart-engine)
+(Swiss Ephemeris, AGPL-3.0). The portal only talks to it over HTTP, so this repository stays private.
 
 ## Run locally
 
 ```bash
-npm install && npm --prefix chart-engine install
+git clone https://github.com/AstrologyBird/astrologybird-chart-engine ../astrologybird-chart-engine
+npm install && npm --prefix ../astrologybird-chart-engine install
 npm run engine            # http://localhost:8787
 cp .env.example .env.local
 npm run dev               # http://localhost:3000 and /nl

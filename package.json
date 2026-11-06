@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "engine": "npm --prefix chart-engine start",
-    "test:engine": "npm --prefix chart-engine test"
+    "engine": "npm --prefix ../astrologybird-chart-engine start",
+    "test:engine": "npm --prefix ../astrologybird-chart-engine test"
   },
   "repository": {
     "type": "git",
