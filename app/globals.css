@@ -161,3 +161,9 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
   .topbar nav { gap: 12px; font-size: 13px; }
   .overlay-list { columns: 1; }
 }
+
+/* 404 */
+.notfound { padding: 72px 0 56px; }
+.notfound h1 { margin: 14px 0 12px; }
+.notfound .lead { max-width: 440px; margin: 0 auto 28px; }
+.notfound-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
