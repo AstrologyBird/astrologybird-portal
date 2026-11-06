@@ -138,7 +138,7 @@ const en = {
   points: {
     sun: 'Sun', moon: 'Moon', mercury: 'Mercury', venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter',
     saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune', pluto: 'Pluto', northNode: 'North Node',
-    southNode: 'South Node', chiron: 'Chiron', lilith: 'Black Moon Lilith', asc: 'Ascendant', mc: 'Midheaven',
+    southNode: 'South Node', chiron: 'Chiron', pholus: 'Pholus', nessus: 'Nessus', lilith: 'Black Moon Lilith', asc: 'Ascendant', mc: 'Midheaven',
     dsc: 'Descendant', ic: 'Imum Coeli',
   },
   signs: {
@@ -300,7 +300,7 @@ const nl: Dictionary = {
   points: {
     sun: 'Zon', moon: 'Maan', mercury: 'Mercurius', venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter',
     saturn: 'Saturnus', uranus: 'Uranus', neptune: 'Neptunus', pluto: 'Pluto', northNode: 'Noordknoop',
-    southNode: 'Zuidknoop', chiron: 'Chiron', lilith: 'Zwarte Maan Lilith', asc: 'Ascendant', mc: 'Medium Coeli',
+    southNode: 'Zuidknoop', chiron: 'Chiron', pholus: 'Pholus', nessus: 'Nessus', lilith: 'Zwarte Maan Lilith', asc: 'Ascendant', mc: 'Medium Coeli',
     dsc: 'Descendant', ic: 'Imum Coeli',
   },
   signs: {

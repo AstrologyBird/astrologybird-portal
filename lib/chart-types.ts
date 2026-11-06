@@ -1,5 +1,5 @@
 export type SignKey = 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
-export type PointKey = 'sun' | 'moon' | 'mercury' | 'venus' | 'mars' | 'jupiter' | 'saturn' | 'uranus' | 'neptune' | 'pluto' | 'northNode' | 'southNode' | 'chiron' | 'lilith' | 'asc' | 'mc' | 'dsc' | 'ic';
+export type PointKey = 'sun' | 'moon' | 'mercury' | 'venus' | 'mars' | 'jupiter' | 'saturn' | 'uranus' | 'neptune' | 'pluto' | 'northNode' | 'southNode' | 'chiron' | 'pholus' | 'nessus' | 'lilith' | 'asc' | 'mc' | 'dsc' | 'ic';
 export type AspectType = 'conjunction' | 'opposition' | 'trine' | 'square' | 'sextile';
 
 export interface Position {
