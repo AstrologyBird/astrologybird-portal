@@ -1,4 +1,4 @@
-# Astrologybird portal
+# AstrologyBird portal
 
 The account portal for **app.astrologybird.com**. The marketing site stays on Framer
 (astrologybird.com); this app is where visitors calculate charts and, later, keep

@@ -169,6 +169,7 @@ const en = {
     warnFallback: 'Placidus houses do not work this close to the pole, so we used Porphyry houses.',
     save: 'Save this chart',
     saveText: 'Create a free AstrologyBird account to keep your chart, add the people you love for relationship readings, and get a personal daily digest.',
+    saveTextSignedIn: 'Add this chart to your people, so you can open it or compare it with yours any time.',
     saveCta: 'Get early access',
     engine: 'Calculated with the Swiss Ephemeris.',
     source: 'Source code',
@@ -176,7 +177,7 @@ const en = {
   points: {
     sun: 'Sun', moon: 'Moon', mercury: 'Mercury', venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter',
     saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune', pluto: 'Pluto', northNode: 'North Node',
-    southNode: 'South Node', chiron: 'Chiron', lilith: 'Black Moon Lilith', asc: 'Ascendant', mc: 'Midheaven',
+    southNode: 'South Node', chiron: 'Chiron', pholus: 'Pholus', nessus: 'Nessus', lilith: 'Black Moon Lilith', asc: 'Ascendant', mc: 'Midheaven',
     dsc: 'Descendant', ic: 'Imum Coeli',
   },
   signs: {
@@ -369,6 +370,7 @@ const nl: Dictionary = {
     warnFallback: 'Placidus-huizen werken niet zo dicht bij de pool, daarom gebruikten we Porphyrius-huizen.',
     save: 'Bewaar deze horoscoop',
     saveText: 'Maak een gratis AstrologyBird-account om je horoscoop te bewaren, je dierbaren toe te voegen voor relatie-duidingen en een persoonlijke daily digest te krijgen.',
+    saveTextSignedIn: 'Voeg deze horoscoop toe aan je mensen, zodat je hem altijd kunt openen of met de jouwe kunt vergelijken.',
     saveCta: 'Krijg als eerste toegang',
     engine: 'Berekend met de Swiss Ephemeris.',
     source: 'Broncode',
@@ -376,7 +378,7 @@ const nl: Dictionary = {
   points: {
     sun: 'Zon', moon: 'Maan', mercury: 'Mercurius', venus: 'Venus', mars: 'Mars', jupiter: 'Jupiter',
     saturn: 'Saturnus', uranus: 'Uranus', neptune: 'Neptunus', pluto: 'Pluto', northNode: 'Noordknoop',
-    southNode: 'Zuidknoop', chiron: 'Chiron', lilith: 'Zwarte Maan Lilith', asc: 'Ascendant', mc: 'Medium Coeli',
+    southNode: 'Zuidknoop', chiron: 'Chiron', pholus: 'Pholus', nessus: 'Nessus', lilith: 'Zwarte Maan Lilith', asc: 'Ascendant', mc: 'Medium Coeli',
     dsc: 'Descendant', ic: 'Imum Coeli',
   },
   signs: {

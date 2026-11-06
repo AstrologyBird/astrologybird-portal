@@ -36,7 +36,7 @@ const ASPECTS = [
 ] as const;
 const FAST: PointKey[] = ['moon'];
 const TRANSITING: PointKey[] = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
-const NATAL: PointKey[] = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'chiron', 'lilith', 'northNode', 'asc', 'mc'];
+const NATAL: PointKey[] = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'chiron', 'pholus', 'nessus', 'lilith', 'northNode', 'asc', 'mc'];
 
 export interface Transit { transiting: PointKey; natal: PointKey; type: (typeof ASPECTS)[number]['type']; orb: number }
 

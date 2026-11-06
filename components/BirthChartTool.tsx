@@ -26,7 +26,12 @@ export default function BirthChartTool({ lang, t, waitlistUrl, sourceUrl }: { la
   const [busy, setBusy] = useState(false);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [fromAccount, setFromAccount] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    supabaseBrowser().auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+  }, []);
 
   useEffect(() => {
     // ?me=1 or ?person=<id>: open a chart saved in the account.
@@ -240,14 +245,14 @@ export default function BirthChartTool({ lang, t, waitlistUrl, sourceUrl }: { la
           {!fromAccount && (
             <section className="card save">
               <h2>{t.result.save}</h2>
-              <p>{t.result.saveText}</p>
+              <p>{signedIn ? t.result.saveTextSignedIn : t.result.saveText}</p>
               <div className="save-actions">
                 {saveState === 'saved' ? (
                   <>
                     <span role="status">✓ {t.acct.savedToAccount}</span>
                     <a className="btn btn-ghost" href={localePath(lang, '/account')}>{t.acct.viewAccount}</a>
                   </>
-                ) : ACCOUNTS_OPEN ? (
+                ) : signedIn || ACCOUNTS_OPEN ? (
                   <button className="btn" type="button" onClick={saveToAccount} disabled={saveState === 'saving'}>
                     {saveState === 'saving' ? t.acct.saving : t.acct.saveToAccount}
                   </button>
