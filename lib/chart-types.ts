@@ -36,3 +36,20 @@ export interface Chart {
 }
 
 export interface Place { id: number; name: string; country: string; countryName: string; lat: number; lon: number; timezone: string }
+
+export interface Composite {
+  method: 'midpoint';
+  points: Position[];
+  angles: Chart['angles'];
+  houses: Chart['houses'];
+  aspects: Aspect[];
+  elements: Chart['elements'];
+  modalities: Chart['modalities'];
+}
+
+export interface Relationship {
+  a: Chart;
+  b: Chart;
+  synastry: { aspects: Aspect[]; aInB: { key: PointKey; house: number }[] | null; bInA: { key: PointKey; house: number }[] | null };
+  composite: Composite;
+}
