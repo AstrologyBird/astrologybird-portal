@@ -87,7 +87,7 @@ const en = {
   },
   form: {
     name: 'Name (optional)',
-    namePlaceholder: 'e.g. Daphne',
+    namePlaceholder: 'e.g. Luna',
     date: 'Date of birth',
     time: 'Time of birth',
     timeUnknown: "I don't know my birth time",
@@ -248,7 +248,7 @@ const nl: Dictionary = {
   },
   form: {
     name: 'Naam (optioneel)',
-    namePlaceholder: 'bijv. Daphne',
+    namePlaceholder: 'bijv. Luna',
     date: 'Geboortedatum',
     time: 'Geboortetijd',
     timeUnknown: 'Ik weet mijn geboortetijd niet',
