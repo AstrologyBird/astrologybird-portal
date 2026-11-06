@@ -43,7 +43,7 @@ export default async function LangLayout({ children, params }: { children: React
           <header className="topbar">
             <a href={lang === 'nl' ? 'https://www.astrologybird.com/nl' : 'https://www.astrologybird.com'} aria-label={t.nav.home}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" alt="Astrologybird" width={148} height={34} />
+              <img src="/logo.svg" alt="AstrologyBird" width={148} height={34} />
             </a>
             <nav>
               <a className="navlink" href={localePath(lang)}>{t.nav.chart}</a>

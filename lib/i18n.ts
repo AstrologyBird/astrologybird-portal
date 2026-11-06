@@ -7,7 +7,7 @@ export const localePath = (lang: Locale, path = '/') => (lang === 'en' ? path : 
 
 const en = {
   meta: {
-    title: 'Free birth chart · Astrologybird',
+    title: 'Free birth chart · AstrologyBird',
     description: 'Calculate your birth chart with Swiss Ephemeris precision: planets, houses, aspects and your Sun, Moon and Rising sign.',
   },
   nav: { home: 'astrologybird.com', account: 'Create your free account', chart: 'Birth chart', relationship: 'Relationship' },
@@ -21,7 +21,7 @@ const en = {
     sent: 'Check your inbox. The link is valid for one hour.',
     linkError: 'That link has expired or was already used. Request a new one.',
     sendError: 'We could not send the link. Please try again in a minute.',
-    accountTitle: 'Your Astrologybird',
+    accountTitle: 'Your AstrologyBird',
     signedInAs: 'Signed in as',
     signOut: 'Sign out',
     profileTitle: 'Your birth details',
@@ -53,7 +53,7 @@ const en = {
     choosePerson: 'Choose from my people',
   },
   rel: {
-    metaTitle: 'Relationship chart: synastry and composite · Astrologybird',
+    metaTitle: 'Relationship chart: synastry and composite · AstrologyBird',
     metaDescription: 'Compare two birth charts. See the aspects between you, where your planets land in each other\'s houses, and the composite chart of your relationship.',
     eyebrow: 'Relationship chart',
     title: 'What happens between the two of you?',
@@ -78,7 +78,7 @@ const en = {
     compositeSunText: 'what this relationship is here to become',
     compositeMoonText: 'what the two of you need to feel at home',
     compositeRisingText: 'how others experience you as a pair',
-    saveText: 'Create a free Astrologybird account to save the people you love and come back to your relationship charts any time.',
+    saveText: 'Create a free AstrologyBird account to save the people you love and come back to your relationship charts any time.',
   },
   hero: {
     eyebrow: 'Free birth chart',
@@ -129,7 +129,8 @@ const en = {
     warnAmbiguous: 'This local time happened twice (clocks went back). We used the first one.',
     warnFallback: 'Placidus houses do not work this close to the pole, so we used Porphyry houses.',
     save: 'Save this chart',
-    saveText: 'Create a free Astrologybird account to keep your chart, add the people you love for relationship readings, and get a personal daily digest.',
+    saveText: 'Create a free AstrologyBird account to keep your chart, add the people you love for relationship readings, and get a personal daily digest.',
+    saveTextSignedIn: 'Add this chart to your people, so you can open it or compare it with yours any time.',
     saveCta: 'Get early access',
     engine: 'Calculated with the Swiss Ephemeris.',
     source: 'Source code',
@@ -168,7 +169,7 @@ export type Dictionary = typeof en;
 
 const nl: Dictionary = {
   meta: {
-    title: 'Gratis geboortehoroscoop · Astrologybird',
+    title: 'Gratis geboortehoroscoop · AstrologyBird',
     description: 'Bereken je geboortehoroscoop met de precisie van de Swiss Ephemeris: planeten, huizen, aspecten en je zon, maan en ascendant.',
   },
   nav: { home: 'astrologybird.com', account: 'Maak je gratis account', chart: 'Geboortehoroscoop', relationship: 'Relatie' },
@@ -182,7 +183,7 @@ const nl: Dictionary = {
     sent: 'Kijk in je inbox. De link is een uur geldig.',
     linkError: 'Die link is verlopen of al gebruikt. Vraag een nieuwe aan.',
     sendError: 'We konden de link niet versturen. Probeer het over een minuut opnieuw.',
-    accountTitle: 'Jouw Astrologybird',
+    accountTitle: 'Jouw AstrologyBird',
     signedInAs: 'Ingelogd als',
     signOut: 'Uitloggen',
     profileTitle: 'Jouw geboortegegevens',
@@ -214,7 +215,7 @@ const nl: Dictionary = {
     choosePerson: 'Kies uit mijn mensen',
   },
   rel: {
-    metaTitle: 'Relatiehoroscoop: synastrie en composiet · Astrologybird',
+    metaTitle: 'Relatiehoroscoop: synastrie en composiet · AstrologyBird',
     metaDescription: 'Vergelijk twee geboortehoroscopen. Zie de aspecten tussen jullie, in welke huizen jullie planeten bij elkaar vallen en de composiethoroscoop van jullie relatie.',
     eyebrow: 'Relatiehoroscoop',
     title: 'Wat gebeurt er tussen jullie twee?',
@@ -239,7 +240,7 @@ const nl: Dictionary = {
     compositeSunText: 'wat deze relatie wil worden',
     compositeMoonText: 'wat jullie samen nodig hebben om je thuis te voelen',
     compositeRisingText: 'hoe anderen jullie als stel ervaren',
-    saveText: 'Maak een gratis Astrologybird-account om je dierbaren te bewaren en altijd terug te komen bij jullie relatiehoroscopen.',
+    saveText: 'Maak een gratis AstrologyBird-account om je dierbaren te bewaren en altijd terug te komen bij jullie relatiehoroscopen.',
   },
   hero: {
     eyebrow: 'Gratis geboortehoroscoop',
@@ -290,7 +291,8 @@ const nl: Dictionary = {
     warnAmbiguous: 'Deze lokale tijd kwam twee keer voor (de klok ging terug). We gebruikten de eerste.',
     warnFallback: 'Placidus-huizen werken niet zo dicht bij de pool, daarom gebruikten we Porphyrius-huizen.',
     save: 'Bewaar deze horoscoop',
-    saveText: 'Maak een gratis Astrologybird-account om je horoscoop te bewaren, je dierbaren toe te voegen voor relatie-duidingen en een persoonlijke daily digest te krijgen.',
+    saveText: 'Maak een gratis AstrologyBird-account om je horoscoop te bewaren, je dierbaren toe te voegen voor relatie-duidingen en een persoonlijke daily digest te krijgen.',
+    saveTextSignedIn: 'Voeg deze horoscoop toe aan je mensen, zodat je hem altijd kunt openen of met de jouwe kunt vergelijken.',
     saveCta: 'Krijg als eerste toegang',
     engine: 'Berekend met de Swiss Ephemeris.',
     source: 'Broncode',
