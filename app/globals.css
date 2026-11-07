@@ -203,3 +203,67 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
 .notfound h1 { margin: 14px 0 12px; }
 .notfound .lead { max-width: 440px; margin: 0 auto 28px; }
 .notfound-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Your Constellation */
+.con { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 8px; }
+.con-sky { display: grid; gap: 12px; }
+.con-svg { width: 100%; height: auto; border-radius: 22px; border: 1px solid var(--line); display: block; }
+.con-side { display: grid; gap: 16px; }
+.con-side .card { display: grid; gap: 10px; }
+.con-side h3 { color: var(--gold); }
+.con-tone { margin: 0; color: var(--ivory); }
+.con-week { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+.con-week .sym { font-family: var(--symbol); color: var(--gold); margin-right: 8px; }
+.con-group { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.con-empty { text-align: center; display: grid; gap: 12px; justify-items: center; }
+.con-empty p { margin: 0; color: var(--muted); }
+.con-center { text-align: center; padding: 40px 0; }
+.con-legend { justify-content: flex-start; }
+.con-pulse { animation: con-pulse 2.4s ease-in-out infinite; }
+.con-pulse-dot { background: var(--ivory); box-shadow: 0 0 8px var(--gold); animation: con-pulse 2.4s ease-in-out infinite; }
+@keyframes con-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .con-pulse, .con-pulse-dot { animation: none; } }
+@media (max-width: 860px) { .con { grid-template-columns: 1fr; } }
+
+/* Learn From Your Own Sky */
+.learn { display: grid; gap: 28px; margin-top: 8px; }
+.learn-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.learn-stat { text-align: center; }
+.learn-stat strong { display: block; font-family: var(--serif); font-size: 34px; color: var(--gold); line-height: 1.1; }
+.learn-stat span { color: var(--muted); font-size: 14px; }
+.levels { display: grid; gap: 14px; }
+.level-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.level-head h3 { color: var(--gold); }
+.badge { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--night-deep); background: var(--gold); border-radius: 999px; padding: 3px 10px; font-weight: 600; }
+.badge-quiet { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.lesson-list { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 8px; }
+.lesson-list li a, .lesson-list li > span { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--night-deep); border: 1px solid rgba(240, 211, 138, 0.12); color: var(--ivory); text-decoration: none; }
+.lesson-list li a:hover { border-color: var(--gold); }
+.lesson-list .state { color: var(--quiet); font-size: 13px; white-space: nowrap; }
+.lesson-list .state.done { color: var(--harmony); }
+.lesson-list li.locked > span { opacity: 0.55; }
+.deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.face { position: relative; aspect-ratio: 2 / 3; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--night-deep); }
+.face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.face.locked img { filter: grayscale(1) brightness(0.25); }
+.face .seal { position: absolute; inset: auto 0 0 0; padding: 4px 6px; font-size: 11px; text-align: center; background: rgba(11, 16, 38, 0.8); color: var(--muted); }
+.face.bl .seal { color: var(--gold); }
+.drawn { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: center; }
+.drawn img { width: 100%; border-radius: 14px; border: 1px solid var(--line); }
+.drawn h3 { color: var(--gold); }
+.drawn p { margin: 6px 0 0; color: var(--muted); }
+.lesson { max-width: 720px; margin: 0 auto; display: grid; gap: 20px; }
+.lesson-section h3 { color: var(--gold); margin-bottom: 8px; }
+.lesson-section p { margin: 0 0 6px; color: var(--ivory); }
+.unlock-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.unlock-row .face { width: 110px; }
+.shadow textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--night-deep); color: var(--ivory); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font: inherit; }
+.shadow textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.shadow-q { font-family: var(--serif); font-size: 22px; color: var(--ivory); margin: 4px 0 10px; }
+.row-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+@media (max-width: 720px) {
+  .learn-stats { grid-template-columns: 1fr; }
+  .drawn { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .drawn img { max-width: 200px; }
+}

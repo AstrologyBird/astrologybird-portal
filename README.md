@@ -57,3 +57,20 @@ is in `supabase/migrations/`.
 
 Supabase settings (Authentication → URL Configuration): Site URL `https://app.astrologybird.com`;
 redirect URLs `https://app.astrologybird.com/**`, `https://*-astrology-bird.vercel.app/**`, `http://localhost:3000/**`.
+
+## Your Constellation and Learn From Your Own Sky (branch `feature/constellation-learn`)
+
+- `/constellation`: the user and their saved people as one sky. Lines show synastry between everyone
+  (gold = flow, red = friction, dashed red over gold = both). Lines a slow planet touches this week pulse.
+  Group composite (circular mean of each point) for any selection; download as PNG. Free accounts see
+  5 people (`FREE_CONSTELLATION`), Inner Circle sees everyone. Logic in `lib/constellation.ts`.
+- `/learn`: seven levels, 25 lessons built from the user's chart (`lib/learn.ts`). Levels 1–2 free,
+  3–7 Inner Circle. Finishing a lesson unlocks deck cards (front); a private shadow question
+  (`lib/shadow-prompts.ts`) unlocks the Black Light side. 52 faces = full deck = Bird Certified gate.
+  Moon streak counts lunar months with a finished lesson.
+- `/tap/<card>`: landing page for the chip / QR code in the physical deck.
+- `/preview/constellation`, `/preview/learn`, `/preview/lesson-<id>`: local design previews with sample
+  people (404 in production).
+- Schema: `supabase/migrations/20261107100000_constellation_learn_readers.sql` (not applied yet), also
+  holds the reader directory tables for the marketplace phase 1.
+- Card art for the web: `public/cards/*.jpg` (360 px wide, made from the deck PNGs).
