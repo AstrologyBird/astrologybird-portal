@@ -4,11 +4,7 @@ import { notFound } from 'next/navigation';
 import { getDictionary, isLocale } from '../../../../lib/i18n';
 import type { PersonRow, ProfileRow } from '../../../../lib/people';
 import { loadSky } from '../../../../lib/constellation-server';
-import { LESSONS, lessonDef, lessonTitle } from '../../../../lib/learn';
-import { lessonFor } from '../../../../lib/learn-server';
 import ConstellationSky from '../../../../components/ConstellationSky';
-import LearnHome from '../../../../components/LearnHome';
-import LessonClient from '../../../../components/LessonClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,24 +31,6 @@ export default async function Preview({ params }: { params: Promise<{ lang: stri
   if (view === 'constellation') {
     const sky = await loadSky(PROFILE, PEOPLE, false, t.con.you);
     return <main><section className="hero"><div className="eyebrow">{t.con.eyebrow}</div><h1>{t.con.title}</h1><p className="lead">{t.con.lead}</p></section><ConstellationSky lang={lang} t={t} initial={sky!} /></main>;
-  }
-  if (view === 'learn') {
-    const unlocks = [
-      ...['sun', 'leo', 'moon', 'gemini', 'taurus', 'mercury', 'venus', 'libra'].map((card_id) => ({ card_id, side: 'front' as const })),
-      ...['sun', 'moon', 'venus'].map((card_id) => ({ card_id, side: 'blacklight' as const })),
-    ];
-    return <main><section className="hero"><div className="eyebrow">{t.learn.eyebrow}</div><h1>{t.learn.title}</h1><p className="lead">{t.learn.lead}</p></section>
-      <LearnHome lang={lang} t={t} data={{ done: ['sun', 'moon', 'rising', 'mercury', 'venus'], unlocks, member: false, streak: 3, titles: Object.fromEntries(LESSONS.map((l) => [l.id, lessonTitle(l.id, lang)])) }} />
-</main>;
-  }
-  if (view.startsWith('lesson-')) {
-    const id = view.slice(7);
-    const def = lessonDef(id);
-    if (!def) notFound();
-    const lesson = await lessonFor(id, lang, t, PROFILE, PEOPLE, true);
-    if (!lesson) notFound();
-    return <main><section className="hero"><div className="eyebrow">{t.learn.level.replace('{n}', String(def.level))}</div><h1>{lesson.title}</h1></section>
-      <LessonClient lang={lang} t={t} lesson={lesson} done={view.endsWith('venus')} fronts={view.endsWith('venus') ? lesson.cards : []} blacklights={[]} /></main>;
   }
   notFound();
 }
