@@ -170,6 +170,34 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
 .linkish:hover { color: var(--ivory); }
 .save-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center; }
 
+/* Ask the Bird */
+.bird { max-width: 720px; margin: 24px auto 0; display: grid; gap: 16px; }
+.bird-card { display: flex; gap: 16px; align-items: flex-start; background: linear-gradient(135deg, rgba(240, 211, 138, 0.12), rgba(26, 37, 71, 0.7)); border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; }
+.bird-card-glyph { font-family: var(--symbol); font-size: 34px; color: var(--gold); line-height: 1; }
+.bird-card p { margin: 6px 0 0; color: var(--muted); font-style: italic; }
+.bird-card .eyebrow { margin-bottom: 4px; }
+.bird-log { display: grid; gap: 14px; }
+.bird-msg { display: grid; gap: 4px; max-width: 88%; }
+.bird-user { justify-self: end; text-align: right; }
+.bird-who { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); }
+.bird-text { white-space: pre-wrap; padding: 14px 16px; border-radius: 16px; line-height: 1.6; overflow-wrap: anywhere; }
+.bird-user .bird-text { background: var(--surface-2); text-align: left; border-bottom-right-radius: 4px; }
+.bird-assistant .bird-text { background: rgba(26, 37, 71, 0.72); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.bird-suggestions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.bird-form { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.bird-form textarea {
+  width: 100%; resize: vertical; min-height: 52px; background: var(--night-deep); color: var(--ivory); border: 1px solid var(--line);
+  border-radius: 12px; padding: 12px 14px; font: inherit;
+}
+.bird-form textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.bird-meta { text-align: center; margin: 0; }
+.bird-empty { display: grid; gap: 12px; justify-items: center; text-align: center; }
+.bird-empty h2 { margin: 0; }
+@media (max-width: 560px) {
+  .bird-msg { max-width: 100%; }
+  .bird-form { grid-template-columns: 1fr; }
+}
+
 /* 404 */
 .notfound { padding: 72px 0 56px; }
 .notfound h1 { margin: 14px 0 12px; }
