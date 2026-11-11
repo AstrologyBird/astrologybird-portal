@@ -80,7 +80,7 @@ export async function POST(req: Request) {
 
   const client = new Anthropic();
   const stream = client.beta.messages.stream({
-    model: 'claude-opus-5-5',
+    model: 'claude-sonnet-5-5',
     max_tokens: 4000,
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
