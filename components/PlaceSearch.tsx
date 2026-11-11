@@ -5,7 +5,7 @@ import type { Place } from '../lib/chart-types';
 import type { Dictionary, Locale } from '../lib/i18n';
 import { placeLabel } from '../lib/people';
 
-export default function PlaceSearch({ lang, t, value, onChange }: { lang: Locale; t: Dictionary; value: Place | null; onChange: (p: Place | null) => void }) {
+export default function PlaceSearch({ lang, t, value, onChange, label }: { lang: Locale; t: Dictionary; value: Place | null; onChange: (p: Place | null) => void; label?: string }) {
   const [query, setQuery] = useState(value ? placeLabel(value) : '');
   const [results, setResults] = useState<Place[]>([]);
   const [open, setOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function PlaceSearch({ lang, t, value, onChange }: { lang: Locale
 
   return (
     <label className="places">
-      {t.form.place}
+      {label ?? t.form.place}
       <input
         role="combobox"
         aria-expanded={open}

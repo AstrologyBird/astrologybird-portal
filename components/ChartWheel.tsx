@@ -68,10 +68,10 @@ export default function ChartWheel({ chart, t, outer, outerAngles, crossAspects,
   const outerMap = new Map<string, Position>((outer ?? []).map((p) => [p.key, p]));
   if (outerAngles) { outerMap.set('asc', outerAngles.asc); outerMap.set('mc', outerAngles.mc); }
 
-  const ring = (r: number, props: React.SVGProps<SVGCircleElement> = {}) => <circle cx={C} cy={C} r={r} fill="none" {...props} />;
-  const line = (lon: number, r1: number, r2: number, props: React.SVGProps<SVGLineElement> = {}) => {
+  const ring = (r: number, { key, ...props }: React.SVGProps<SVGCircleElement> & { key?: React.Key } = {}) => <circle key={key} cx={C} cy={C} r={r} fill="none" {...props} />;
+  const line = (lon: number, r1: number, r2: number, { key, ...props }: React.SVGProps<SVGLineElement> & { key?: React.Key } = {}) => {
     const [x1, y1] = xy(lon, r1); const [x2, y2] = xy(lon, r2);
-    return <line x1={x1} y1={y1} x2={x2} y2={y2} {...props} />;
+    return <line key={key} x1={x1} y1={y1} x2={x2} y2={y2} {...props} />;
   };
 
   const label = ariaLabel ?? `${t.result.bigThree}: ${t.signs[chart.bigThree.sun]}, ${t.signs[chart.bigThree.moon]}${chart.bigThree.rising ? ', ' + t.signs[chart.bigThree.rising] : ''}`;
