@@ -16,7 +16,7 @@ async function birdNote(profile: ProfileRow, natal: Chart, sky: Chart, transits:
   const card = cardOfTheDay(userId);
   try {
     const res = await new Anthropic().beta.messages.create({
-      model: 'claude-opus-5-5',
+      model: 'claude-sonnet-5-5',
       max_tokens: 2000,
       betas: ['server-side-fallback-2026-07-01'],
       fallbacks: 'default',
