@@ -1,7 +1,7 @@
 // Server-side helpers shared by Ask the Bird and the daily digest:
 // a person's natal chart, today's sky, personal transits and the card of the day.
 import type { Chart, PointKey, Position } from './chart-types';
-import type { ProfileRow } from './people';
+import type { PersonRow, ProfileRow } from './people';
 import deck from './oracle-deck.json';
 
 const ENGINE = (process.env.CHART_ENGINE_URL || (process.env.NODE_ENV === 'production' ? 'https://astrologybird-chart-engine-2ofw.vercel.app' : 'http://localhost:8787')).replace(/\/$/, '');
@@ -21,6 +21,14 @@ export function natalChart(p: ProfileRow): Promise<Chart> | null {
   return chart({
     name: p.display_name, date: p.birth_date, time: p.time_unknown ? null : p.birth_time?.slice(0, 5) ?? null,
     lat: p.lat, lon: p.lon, timezone: p.timezone, houseSystem: p.house_system,
+  });
+}
+
+/** Natal chart of a saved person (partner, friend, family). */
+export function personChart(p: PersonRow, houseSystem: ProfileRow['house_system'] = 'placidus'): Promise<Chart> {
+  return chart({
+    name: p.name, date: p.birth_date, time: p.time_unknown ? null : p.birth_time?.slice(0, 5) ?? null,
+    lat: p.lat, lon: p.lon, timezone: p.timezone, houseSystem,
   });
 }
 
