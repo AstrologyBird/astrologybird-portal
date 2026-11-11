@@ -170,8 +170,68 @@ td.sym { font-family: var(--symbol); color: var(--gold); width: 28px; font-size:
 .linkish:hover { color: var(--ivory); }
 .save-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center; }
 
+/* Ask the Bird */
+.bird { max-width: 720px; margin: 24px auto 0; display: grid; gap: 16px; }
+.bird-card { display: flex; gap: 16px; align-items: flex-start; background: linear-gradient(135deg, rgba(240, 211, 138, 0.12), rgba(26, 37, 71, 0.7)); border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; }
+.bird-card-glyph { font-family: var(--symbol); font-size: 34px; color: var(--gold); line-height: 1; }
+.bird-card p { margin: 6px 0 0; color: var(--muted); font-style: italic; }
+.bird-card .eyebrow { margin-bottom: 4px; }
+.bird-log { display: grid; gap: 14px; }
+.bird-msg { display: grid; gap: 4px; max-width: 88%; }
+.bird-user { justify-self: end; text-align: right; }
+.bird-who { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); }
+.bird-text { white-space: pre-wrap; padding: 14px 16px; border-radius: 16px; line-height: 1.6; overflow-wrap: anywhere; }
+.bird-user .bird-text { background: var(--surface-2); text-align: left; border-bottom-right-radius: 4px; }
+.bird-assistant .bird-text { background: rgba(26, 37, 71, 0.72); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.bird-suggestions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.bird-form { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.bird-form textarea {
+  width: 100%; resize: vertical; min-height: 52px; background: var(--night-deep); color: var(--ivory); border: 1px solid var(--line);
+  border-radius: 12px; padding: 12px 14px; font: inherit;
+}
+.bird-form textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.bird-meta { text-align: center; margin: 0; }
+.bird-empty { display: grid; gap: 12px; justify-items: center; text-align: center; }
+.bird-empty h2 { margin: 0; }
+@media (max-width: 560px) {
+  .bird-msg { max-width: 100%; }
+  .bird-form { grid-template-columns: 1fr; }
+}
+
 /* 404 */
 .notfound { padding: 72px 0 56px; }
 .notfound h1 { margin: 14px 0 12px; }
 .notfound .lead { max-width: 440px; margin: 0 auto 28px; }
 .notfound-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Your Constellation */
+.con { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 8px; }
+.con-sky { display: grid; gap: 12px; }
+.con-svg { width: 100%; height: auto; border-radius: 22px; border: 1px solid var(--line); display: block; }
+.con-side { display: grid; gap: 16px; }
+.con-side .card { display: grid; gap: 10px; }
+.con-side h3 { color: var(--gold); }
+.con-tone { margin: 0; color: var(--ivory); }
+.con-week { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+.con-week .sym { font-family: var(--symbol); color: var(--gold); margin-right: 8px; }
+.con-group { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.con-empty { text-align: center; display: grid; gap: 12px; justify-items: center; }
+.con-empty p { margin: 0; color: var(--muted); }
+.con-center { text-align: center; padding: 40px 0; }
+.con-legend { justify-content: flex-start; }
+.con-pulse { animation: con-pulse 2.4s ease-in-out infinite; }
+.con-pulse-dot { background: var(--ivory); box-shadow: 0 0 8px var(--gold); animation: con-pulse 2.4s ease-in-out infinite; }
+@keyframes con-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .con-pulse, .con-pulse-dot { animation: none; } }
+@media (max-width: 860px) { .con { grid-template-columns: 1fr; } }
+
+/* Card landing page (/tap) */
+.drawn { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: center; }
+.drawn img { width: 100%; border-radius: 14px; border: 1px solid var(--line); }
+.drawn h3 { color: var(--gold); }
+.drawn p { margin: 6px 0 0; color: var(--muted); }
+.tap-card { max-width: 720px; margin: 0 auto; display: grid; gap: 20px; }
+@media (max-width: 720px) {
+  .drawn { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .drawn img { max-width: 200px; }
+}
