@@ -1,5 +1,5 @@
 -- Reader directory (Your Constellation needs no new tables).
--- NOT yet applied to project bjcseowrzyhylhjtozih: apply together with the deploy of this branch.
+-- Applied to project bjcseowrzyhylhjtozih on 2026-11-11.
 
 -- ---------------------------------------------------------------------------
 -- Reader directory (marketplace phase 1: profiles link out, no payments yet)

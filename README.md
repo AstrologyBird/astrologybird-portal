@@ -66,5 +66,5 @@ redirect URLs `https://app.astrologybird.com/**`, `https://*-astrology-bird.verc
   5 people (`FREE_CONSTELLATION`), Inner Circle sees everyone. Logic in `lib/constellation.ts`.
 - `/tap/<card>`: landing page for the chip / QR code in the physical deck; links to Ask the Bird.
 - `/preview/constellation`: local design preview with sample people (404 in production).
-- Schema: `supabase/migrations/20261107100000_reader_directory.sql` (not applied yet): reader directory tables for marketplace phase 1.
+- Schema: `supabase/migrations/20261107100000_reader_directory.sql` (applied 2026-11-11): reader directory tables for marketplace phase 1.
 - Card art for the web: `public/cards/*.jpg` (360 px wide, made from the deck PNGs).
