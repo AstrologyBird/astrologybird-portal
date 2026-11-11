@@ -10,7 +10,7 @@ const R_TICK = 254;
 
 const ELEMENT_COLOR = { fire: '#e8a96b', earth: '#b9c98a', air: '#c9c3e8', water: '#8fc3d3' } as const;
 const HARMONY = new Set(['trine', 'sextile']);
-const MINOR = new Set(['northNode', 'southNode', 'chiron', 'lilith']);
+const MINOR = new Set(['northNode', 'southNode', 'chiron', 'pholus', 'nessus', 'lilith']);
 const OUTER_COLOR = '#c9a7f0';
 
 function spread(longitudes: number[], minGap = 7.5): number[] {

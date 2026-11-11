@@ -3,9 +3,10 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Place } from '../lib/chart-types';
 import type { Dictionary, Locale } from '../lib/i18n';
+import { placeLabel } from '../lib/people';
 
 export default function PlaceSearch({ lang, t, value, onChange }: { lang: Locale; t: Dictionary; value: Place | null; onChange: (p: Place | null) => void }) {
-  const [query, setQuery] = useState(value ? `${value.name}, ${value.countryName}` : '');
+  const [query, setQuery] = useState(value ? placeLabel(value) : '');
   const [results, setResults] = useState<Place[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -15,7 +16,7 @@ export default function PlaceSearch({ lang, t, value, onChange }: { lang: Locale
 
   useEffect(() => {
     clearTimeout(timer.current);
-    if (value && query === `${value.name}, ${value.countryName}`) return;
+    if (value && query === placeLabel(value)) return;
     if (query.trim().length < 2) { setResults([]); setSearched(false); return; }
     timer.current = setTimeout(async () => {
       try {
@@ -32,9 +33,13 @@ export default function PlaceSearch({ lang, t, value, onChange }: { lang: Locale
     return () => clearTimeout(timer.current);
   }, [query, lang, value]);
 
+  useEffect(() => {
+    if (value) setQuery(placeLabel(value));
+  }, [value]);
+
   const choose = (p: Place) => {
     onChange(p);
-    setQuery(`${p.name}, ${p.countryName}`);
+    setQuery(placeLabel(p));
     setOpen(false);
   };
 

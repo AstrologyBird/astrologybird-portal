@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import type { Chart, Place, Position } from '../lib/chart-types';
 import type { Dictionary, Locale } from '../lib/i18n';
 import { POINT_GLYPH, SIGN_GLYPH } from '../lib/glyphs';
+import { localePath } from '../lib/i18n';
+import { PENDING_KEY, personColumns } from '../lib/people';
+import { loadSaved } from '../lib/saved';
+import { supabaseBrowser } from '../lib/supabase/browser';
+import { ACCOUNTS_OPEN } from '../lib/supabase/config';
 import PlaceSearch from './PlaceSearch';
 import ChartWheel from './ChartWheel';
 
@@ -19,15 +24,52 @@ export default function BirthChartTool({ lang, t, waitlistUrl, sourceUrl }: { la
   const [chart, setChart] = useState<Chart | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [fromAccount, setFromAccount] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  // Guests keep their last input in this browser only (nothing is stored on a server).
   useEffect(() => {
+    supabaseBrowser().auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+  }, []);
+
+  useEffect(() => {
+    // ?me=1 or ?person=<id>: open a chart saved in the account.
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('me') ? 'me' : params.get('person');
+    if (ref) {
+      loadSaved(ref).then(async (input) => {
+        if (!input?.place) return;
+        const next = { ...form, ...input };
+        setForm(next);
+        setFromAccount(true);
+        try { setChart(await calculate(next)); } catch { setError(t.form.errorGeneric); }
+      });
+      return;
+    }
+    // Guests keep their last input in this browser only (nothing is stored on a server).
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) setForm((f) => ({ ...f, ...JSON.parse(saved) }));
     } catch { /* storage unavailable */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const saveToAccount = async () => {
+    if (!form.place) return;
+    const sb = supabaseBrowser();
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      // Remember the chart, sign in, and the account page stores it.
+      try { localStorage.setItem(PENDING_KEY, JSON.stringify([form])); } catch { /* ignore */ }
+      window.location.href = `${localePath(lang, '/login')}?next=${encodeURIComponent(localePath(lang, '/account'))}`;
+      return;
+    }
+    setSaveState('saving');
+    const { error: err } = await sb.from('people').insert({ owner_id: session.user.id, ...personColumns(form) });
+    setSaveState(err ? 'idle' : 'saved');
+    if (err) setError(t.form.errorGeneric);
+  };
 
   const calculate = async (f: FormState) => {
     const res = await fetch('/api/chart', {
@@ -51,6 +93,8 @@ export default function BirthChartTool({ lang, t, waitlistUrl, sourceUrl }: { la
     try {
       const c = await calculate(form);
       setChart(c);
+      setSaveState('idle');
+      setFromAccount(false);
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(form)); } catch { /* ignore */ }
       requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     } catch {
@@ -198,11 +242,26 @@ export default function BirthChartTool({ lang, t, waitlistUrl, sourceUrl }: { la
             </section>
           )}
 
-          <section className="card save">
-            <h2>{t.result.save}</h2>
-            <p>{t.result.saveText}</p>
-            <a className="btn" href={waitlistUrl}>{t.result.saveCta}</a>
-          </section>
+          {!fromAccount && (
+            <section className="card save">
+              <h2>{t.result.save}</h2>
+              <p>{signedIn ? t.result.saveTextSignedIn : t.result.saveText}</p>
+              <div className="save-actions">
+                {saveState === 'saved' ? (
+                  <>
+                    <span role="status">✓ {t.acct.savedToAccount}</span>
+                    <a className="btn btn-ghost" href={localePath(lang, '/account')}>{t.acct.viewAccount}</a>
+                  </>
+                ) : signedIn || ACCOUNTS_OPEN ? (
+                  <button className="btn" type="button" onClick={saveToAccount} disabled={saveState === 'saving'}>
+                    {saveState === 'saving' ? t.acct.saving : t.acct.saveToAccount}
+                  </button>
+                ) : (
+                  <a className="btn" href={waitlistUrl}>{t.result.saveCta}</a>
+                )}
+              </div>
+            </section>
+          )}
 
           <p style={{ textAlign: 'center', color: 'var(--quiet)', fontSize: 12, margin: 0 }}>
             {t.result.engine}{sourceUrl && <> <a href={sourceUrl}>{t.result.source}</a> (AGPL-3.0)</>}
