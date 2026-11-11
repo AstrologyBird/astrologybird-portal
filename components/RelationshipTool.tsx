@@ -5,25 +5,35 @@ import type { Chart, Place, Position, Relationship } from '../lib/chart-types';
 import type { Dictionary, Locale } from '../lib/i18n';
 import { POINT_GLYPH, SIGN_GLYPH } from '../lib/glyphs';
 import { listSaved } from '../lib/saved';
-import { inputFromPerson, type BirthInput } from '../lib/people';
+import { inputFromPerson, personColumns, PENDING_KEY, type BirthInput } from '../lib/people';
+import { localePath } from '../lib/i18n';
+import { ACCOUNTS_OPEN } from '../lib/supabase/config';
+import { supabaseBrowser } from '../lib/supabase/browser';
 import PlaceSearch from './PlaceSearch';
 import ChartWheel from './ChartWheel';
 
 const STORAGE_KEY = 'astrologybird:last-relationship-input';
 const HARMONY = new Set(['trine', 'sextile']);
+const MAJOR = new Set(['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto']);
 
 type Person = { name: string; date: string; time: string; timeUnknown: boolean; place: Place | null };
 const empty: Person = { name: '', date: '', time: '', timeUnknown: false, place: null };
 
 const fmt = (p: Position) => `${p.degree}°${String(p.minute).padStart(2, '0')}′`;
 const fill = (s: string, a: string, b: string) => s.replace('{a}', a).replace('{b}', b);
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 type Saved = { key: string; label: string; input: BirthInput };
 
-function PersonFields({ title, p, set, lang, t, saved }: { title: string; p: Person; set: (p: Person) => void; lang: Locale; t: Dictionary; saved: Saved[] }) {
+type Seat = { kicker: string; namePlaceholder: string; timeUnknown: string };
+
+function PersonFields({ title, seat, p, set, lang, t, saved }: { title: string; seat: Seat; p: Person; set: (p: Person) => void; lang: Locale; t: Dictionary; saved: Saved[] }) {
   return (
-    <div className="card">
-      <h3>{title}</h3>
+    <fieldset className="seat">
+      <legend className="seat-head">
+        <span className="seat-num" aria-hidden="true">{seat.kicker}</span>
+        <span className="seat-title">{title}</span>
+      </legend>
       {saved.length > 0 && (
         <label>
           {t.acct.choosePerson}
@@ -33,26 +43,27 @@ function PersonFields({ title, p, set, lang, t, saved }: { title: string; p: Per
           </select>
         </label>
       )}
-      <label>
-        {t.form.name}
-        <input value={p.name} maxLength={40} onChange={(e) => set({ ...p, name: e.target.value })} />
+      <label className="seat-name">
+        <span className="vh">{t.form.name}</span>
+        <input value={p.name} maxLength={40} placeholder={seat.namePlaceholder} onChange={(e) => set({ ...p, name: e.target.value })} />
+        <small>{t.rel.optional}</small>
       </label>
       <div className="form-row">
         <label>
-          {t.form.date}
+          {t.rel.bornOn}
           <input type="date" required min="1800-01-01" max="2399-12-31" value={p.date} onChange={(e) => set({ ...p, date: e.target.value })} />
         </label>
         <label>
-          {t.form.time}
+          {t.rel.bornAt}
           <input type="time" required={!p.timeUnknown} disabled={p.timeUnknown} value={p.time} onChange={(e) => set({ ...p, time: e.target.value })} />
         </label>
       </div>
-      <label className="check">
+      <label className="check seat-check">
         <input type="checkbox" checked={p.timeUnknown} onChange={(e) => set({ ...p, timeUnknown: e.target.checked })} />
-        {t.form.timeUnknown}
+        {seat.timeUnknown}
       </label>
-      <PlaceSearch lang={lang} t={t} value={p.place} onChange={(place) => set({ ...p, place })} />
-    </div>
+      <PlaceSearch lang={lang} t={t} label={t.rel.bornIn} value={p.place} onChange={(place) => set({ ...p, place })} />
+    </fieldset>
   );
 }
 
@@ -71,11 +82,13 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
   const [a, setA] = useState<Person>(empty);
   const [b, setB] = useState<Person>(empty);
   const [result, setResult] = useState<Relationship | null>(null);
-  const [tab, setTab] = useState<'synastry' | 'composite'>('synastry');
+  const [tab, setTab] = useState<'synastry' | 'composite' | 'a' | 'b'>('synastry');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState<Saved[]>([]);
   const [autoRun, setAutoRun] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,6 +99,7 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
     // Signed in: offer saved people, and fill ?a=me&b=<id> from the account.
     listSaved().then((list) => {
       if (!list) return;
+      setSignedIn(true);
       const options: Saved[] = [
         ...(list.me ? [{ key: 'me', label: `${t.acct.me}${list.me.name ? ` (${list.me.name})` : ''}`, input: list.me }] : []),
         ...list.people.map((r) => ({ key: r.id, label: r.relation ? `${r.name} · ${r.relation}` : r.name, input: inputFromPerson(r) })),
@@ -103,6 +117,26 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
 
   const nameA = a.name.trim() || t.rel.personA;
   const nameB = b.name.trim() || t.rel.personB;
+  // Possessive forms: "your" / "their" / "Luna's" (NL: "jou" / "de ander" / "Luna").
+  const possA = a.name.trim() ? t.rel.possName.replace('{n}', a.name.trim()) : t.rel.possYou;
+  const possB = b.name.trim() ? t.rel.possName.replace('{n}', b.name.trim()) : t.rel.possThem;
+
+  const saveBoth = async () => {
+    // Skip people that are already in the account (picked from the saved list).
+    const known = new Set(saved.map((s) => `${s.input.date}|${s.input.name}`));
+    const fresh = [a, b].filter((p) => p.date && p.place && !known.has(`${p.date}|${p.name}`));
+    const sb = supabaseBrowser();
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      try { localStorage.setItem(PENDING_KEY, JSON.stringify(fresh)); } catch { /* ignore */ }
+      window.location.href = `${localePath(lang, '/login')}?next=${encodeURIComponent(localePath(lang, '/account'))}`;
+      return;
+    }
+    setSaveState('saving');
+    const { error: err } = fresh.length ? await sb.from('people').insert(fresh.map((p) => ({ owner_id: session.user.id, ...personColumns(p) }))) : { error: null };
+    setSaveState(err ? 'idle' : 'saved');
+    if (err) setError(t.form.errorGeneric);
+  };
 
   useEffect(() => {
     if (autoRun && a.place && b.place) { setAutoRun(false); run(); }
@@ -140,17 +174,20 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
     fusion: syn.aspects.filter((x) => x.type === 'conjunction').length,
   } : null;
   const composite = result ? compositeAsChart(result) : null;
+  // Tightest aspect between the classic planets (no angles or minor bodies).
+  const strongest = syn ? [...syn.aspects].filter((x) => MAJOR.has(x.a) && MAJOR.has(x.b)).sort((x, y) => x.orb - y.orb)[0] ?? null : null;
 
   return (
     <>
       <form onSubmit={submit}>
         <div className="person-grid">
-          <PersonFields title={t.rel.personA} p={a} set={setA} lang={lang} t={t} saved={saved} />
-          <PersonFields title={t.rel.personB} p={b} set={setB} lang={lang} t={t} saved={saved} />
+          <PersonFields title={t.rel.personA} seat={t.rel.you} p={a} set={setA} lang={lang} t={t} saved={saved} />
+          <div className="pair-knot" aria-hidden="true"><span>&amp;</span></div>
+          <PersonFields title={t.rel.personB} seat={t.rel.them} p={b} set={setB} lang={lang} t={t} saved={saved} />
         </div>
         <div className="submit-row">
           {error && <p className="error" role="alert">{error}</p>}
-          <button className="btn" type="submit" disabled={busy}>{busy ? t.form.calculating : t.rel.submit}</button>
+          <button className="btn btn-big" type="submit" disabled={busy}><span aria-hidden="true">✦</span>{busy ? t.form.calculating : t.rel.submit}</button>
         </div>
       </form>
 
@@ -161,14 +198,43 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
           </div>
 
           <div className="tabs" role="tablist">
-            {(['synastry', 'composite'] as const).map((k) => (
+            {(['synastry', 'composite', 'a', 'b'] as const).map((k) => (
               <button key={k} type="button" role="tab" aria-selected={tab === k} className={`btn btn-small ${tab === k ? '' : 'btn-ghost'}`} onClick={() => setTab(k)}>
-                {k === 'synastry' ? t.rel.tabSynastry : t.rel.tabComposite}
+                {k === 'synastry' ? t.rel.tabSynastry : k === 'composite' ? t.rel.tabComposite : k === 'a' ? nameA : nameB}
               </button>
             ))}
           </div>
 
-          {tab === 'synastry' ? (
+          {(tab === 'a' || tab === 'b') && (() => {
+            const solo = tab === 'a' ? result.a : result.b;
+            const who = tab === 'a' ? nameA : nameB;
+            return (
+              <>
+                <p className="lead" style={{ textAlign: 'center' }}>{t.rel.soloIntro}</p>
+                <section className="bigthree">
+                  {([['sun', t.result.sun, t.result.sunText], ['moon', t.result.moon, t.result.moonText], ['rising', t.result.rising, t.result.risingText]] as const).map(([k, label, meaning]) => {
+                    const sign = solo.bigThree[k];
+                    return (
+                      <div className="card big" key={k}>
+                        <div className="label">{label}</div>
+                        {sign ? (
+                          <>
+                            <div className="glyph" aria-hidden="true">{SIGN_GLYPH[sign]}</div>
+                            <div className="sign">{t.signs[sign]}</div>
+                            <div className="meaning">{meaning}</div>
+                            <div className="kw">{t.signKeywords[sign]}</div>
+                          </>
+                        ) : <div className="meaning" style={{ marginTop: 24 }}>{t.result.risingUnknown}</div>}
+                      </div>
+                    );
+                  })}
+                </section>
+                <div className="card wheel-wrap"><ChartWheel chart={solo} t={t} ariaLabel={who} /></div>
+              </>
+            );
+          })()}
+
+          {tab === 'synastry' && (
             <>
               <p className="lead" style={{ textAlign: 'center' }}>{fill(t.rel.synastryIntro, nameA, nameB)}</p>
               <div className="legend">
@@ -181,6 +247,18 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
                 <ChartWheel chart={result.a} t={t} outer={result.b.points} outerAngles={result.b.angles} crossAspects={syn.aspects}
                   ariaLabel={`${nameA} & ${nameB}: ${t.rel.tabSynastry}`} />
               </div>
+
+              {strongest && (
+                <section className="thread">
+                  <div className="eyebrow">{t.rel.strongestTitle}</div>
+                  <p className="thread-line">
+                    <span className="sym">{POINT_GLYPH[strongest.a]}</span> {t.points[strongest.a]} <small>({nameA})</small>
+                    {' '}<em className={strongest.type === 'conjunction' ? 'type-neutral' : HARMONY.has(strongest.type) ? 'type-harmony' : 'type-tension'}>{t.aspects[strongest.type]}</em>{' '}
+                    <span className="sym" style={{ color: '#c9a7f0' }}>{POINT_GLYPH[strongest.b]}</span> {t.points[strongest.b]} <small>({nameB})</small>
+                  </p>
+                  <p className="thread-meaning">{t.rel.aspectMeaning[strongest.type]}</p>
+                </section>
+              )}
 
               <section className="card">
                 <h3 style={{ marginBottom: 14, textAlign: 'center' }}>{t.rel.balanceTitle}</h3>
@@ -208,9 +286,9 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
               </section>
 
               <div className="grid-2">
-                {([[syn.aInB, result.a, nameA, nameB], [syn.bInA, result.b, nameB, nameA]] as const).map(([list, chart, who, other]) => (
+                {([[syn.aInB, result.a, possA, possB], [syn.bInA, result.b, possB, possA]] as const).map(([list, chart, who, other]) => (
                   <section className="card" key={who}>
-                    <h3 style={{ marginBottom: 10 }}>{fill(t.rel.overlays, who, other)}</h3>
+                    <h3 style={{ marginBottom: 10 }}>{cap(fill(t.rel.overlays, who, other))}</h3>
                     {list ? (
                       <ul className="overlay-list">
                         {list.map((o) => {
@@ -224,12 +302,14 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
                           );
                         })}
                       </ul>
-                    ) : <p className="hint" style={{ margin: 0 }}>{fill(t.rel.overlayNeedsTime, who, other)}</p>}
+                    ) : <p className="hint" style={{ margin: 0 }}>{cap(fill(t.rel.overlayNeedsTime, who, other))}</p>}
                   </section>
                 ))}
               </div>
             </>
-          ) : (
+          )}
+
+          {tab === 'composite' && (
             <>
               <p className="lead" style={{ textAlign: 'center' }}>{t.rel.compositeIntro}</p>
               <section className="bigthree">
@@ -285,10 +365,29 @@ export default function RelationshipTool({ lang, t, waitlistUrl }: { lang: Local
             </>
           )}
 
-          <section className="card save">
-            <h2>{t.result.save}</h2>
-            <p>{t.rel.saveText}</p>
-            <a className="btn" href={waitlistUrl}>{t.result.saveCta}</a>
+          <section className="keep">
+            <div className="keep-copy">
+              <div className="eyebrow">AstrologyBird</div>
+              <h2>{t.rel.saveTitle}</h2>
+              <p>{t.rel.saveLead}</p>
+              <div className="save-actions">
+                {saveState === 'saved' ? (
+                  <>
+                    <span role="status">✓ {t.rel.savedBoth}</span>
+                    <a className="btn btn-ghost" href={localePath(lang, '/constellation')}>{t.rel.openConstellation}</a>
+                  </>
+                ) : signedIn || ACCOUNTS_OPEN ? (
+                  <button className="btn btn-big" type="button" onClick={saveBoth} disabled={saveState === 'saving'}>
+                    {saveState === 'saving' ? t.acct.saving : t.rel.saveBoth}
+                  </button>
+                ) : (
+                  <a className="btn btn-big" href={waitlistUrl}>{t.result.saveCta}</a>
+                )}
+              </div>
+            </div>
+            <ul className="keep-perks">
+              {t.rel.perks.map((perk) => <li key={perk}><span aria-hidden="true">✦</span>{perk}</li>)}
+            </ul>
           </section>
         </div>
       )}
